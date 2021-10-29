@@ -1,0 +1,5 @@
+{
+    "amountEveryKm": 10,
+    "defaultAmount": 10,
+    "pdfPath": "assets/doc"
+}

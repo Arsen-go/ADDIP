@@ -1,0 +1,44 @@
+{
+  "name": "addip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arsen-go/ADDIP.git"
+  },
+  "keywords": [
+    "arsen"
+  ],
+  "author": "arsen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Arsen-go/ADDIP/issues"
+  },
+  "homepage": "https://github.com/Arsen-go/ADDIP#readme",
+  "dependencies": {
+    "apollo-server": "^3.4.0",
+    "apollo-server-core": "^3.4.0",
+    "apollo-server-express": "^3.4.0",
+    "aws-sdk": "^2.1017.0",
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^10.0.0",
+    "email-validator": "^2.0.4",
+    "express": "^4.17.1",
+    "graphql": "^16.0.0",
+    "graphql-subscriptions": "^1.2.1",
+    "http": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongoose": "^6.0.12",
+    "phone": "^3.1.8",
+    "twilio": "^3.70.0",
+    "uniqid": "^5.4.0",
+    "yup": "^0.32.11"
+  }
+}
