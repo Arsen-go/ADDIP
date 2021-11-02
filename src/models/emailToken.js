@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const phoneTokenSchema = new Schema({
+const mailTokenSchema = new Schema({
   id: {
     type: String, 
     unique: true,
@@ -23,5 +23,5 @@ const phoneTokenSchema = new Schema({
   },
 });
 
-const TokenPhone = mongoose.model("TokenPhone", phoneTokenSchema);
-module.exports = { TokenPhone };
+const EmailToken = mongoose.model("EmailToken", mailTokenSchema);
+module.exports = { EmailToken };

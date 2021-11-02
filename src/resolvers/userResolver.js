@@ -1,5 +1,5 @@
 const { authenticated, roleAuthentication } = require("../auth");
-const { User, Car, UserCar } = require("../models");
+const { User } = require("../models");
 
 let validator, repository;
 
@@ -13,9 +13,14 @@ class UserResolver {
     thisUser: roleAuthentication(["USER"], async (_, { }, { currentUser }) => await User.findOne({ id: currentUser.id })),
   };
 
-  User = { };
+  User = {};
 
-  Mutation = { };
+  Mutation = {
+    createUserProfile: roleAuthentication(["USER"], async (_, { firstName, lastName, birthDate, gender }, { currentUser }) => {
+      await validator.validateCreateUserProfile(firstName, lastName, birthDate, gender);
+      return await repository.createUserProfile(currentUser, firstName, lastName, birthDate, gender);
+    }),
+  };
 };
 
 module.exports = UserResolver;

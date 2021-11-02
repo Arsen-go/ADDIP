@@ -2,21 +2,15 @@ const Validator = require("./validator");
 const { yup, ValidationError } = require("../constants");
 
 class UserValidator extends Validator {
-  async validateCreateDetails(args) {
-    const { birthDate, email, phone } = args;
+  async validateCreateUserProfile(firstName, lastName, birthDate, gender) {
     const schema = yup.object().shape({
       firstName: yup.string().required(),
       lastName: yup.string().required(),
-      email: yup.string(),
       birthDate: yup.string().required(),
-      country: yup.string(),
-      city: yup.string(),
-      phone: yup.string().required()
+      gender: yup.string().required(),
     })
-    await this.validateYupSchema(schema, args);
-    await this.validateEmail(email);
+    await this.validateYupSchema(schema, { firstName, lastName, birthDate, gender });
     await this.validateUserBirthDate(birthDate);
-    await this.validatePhoneNumber(phone);
   };
 
   async validateEditDetails(args) {

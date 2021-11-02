@@ -1,8 +1,8 @@
 const Validator = require("./validator");
 
 class AuthValidator extends Validator {
-    async validate(phone) {
-        await this.validatePhoneNumber(phone);
+    async validate(email) {
+        await this.validateEmail(email);
     };
 };
 

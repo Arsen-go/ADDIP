@@ -12,9 +12,10 @@ const query = gql`
   type Mutation {
     #### Admin ####
     #### Mobile ####
-    authenticateUser (token: String!, phone: String!): Token
+    authenticateUser (code: String!, email: String!): Token
     createAttachment (id: String,contentType: String, pixelWidth: Float, pixelHeight: Float, size: String, name: String): Attachment!
-    verifyPhone (phone: String!): String
+    verifyEmail (email: String!): String
+    createUserProfile (firstName: String!, lastName: String!, birthDate: String!, gender: String!): User
     #### General ####
   }
 

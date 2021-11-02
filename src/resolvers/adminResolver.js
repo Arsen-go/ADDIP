@@ -1,5 +1,5 @@
 const { roleAuthentication } = require("../auth");
-const { UserCar, Car, Order, Util, User } = require("../models");
+const { User } = require("../models");
 
 class AdminResolver {
   constructor() { };

@@ -7,13 +7,9 @@ const userSchema = new Schema({
     unique: true,
     required: true,
   },
-  phone: {
-    type: String,
-    unique: true,
-    required: true,
-  },
   email: {
     type: String,
+    required: true,
   },
   firstName: {
     type: String,
@@ -39,11 +35,8 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    required: true,
     default: "USER",
   },
-  userCar: { type: Schema.Types.ObjectId, ref: "UserCar" },
-  stripe: { type: Schema.Types.ObjectId, ref: "Stripe" },
 });
 
 const User = mongoose.model("User", userSchema);

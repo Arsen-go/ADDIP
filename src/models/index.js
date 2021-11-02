@@ -1,7 +1,7 @@
 const { User } = require("./user");
 const { Attachment } = require("./attachment");
-const { TokenPhone } = require("./tokenPhone");
+const { EmailToken } = require("./emailToken");
 
 module.exports = {
-     User, Attachment, TokenPhone
+     User, Attachment, EmailToken
 };

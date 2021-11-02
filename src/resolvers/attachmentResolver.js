@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { ApolloError } = require('../constants');
 const { authenticated, roleAuthentication } = require('../auth');
-const { User, Attachment, Driver } = require('../models');
+const { User, Attachment } = require('../models');
 
 let validator, repository;
 

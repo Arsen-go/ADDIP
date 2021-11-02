@@ -1,40 +1,23 @@
 const { uniqid, jsonwebtoken, ForbiddenError, ApolloError } = require("../constants");
-const { TokenPhone, User, Driver } = require("../models");
-const { twillioNumber, twillio } = require("../middleware/twillio");
+const { EmailToken, User, Driver } = require("../models");
+const { sendMail } = require("../middleware/nodeMailer");
 
 class AuthRepository {
-    async verify(phone) {
+    async verifyEmail(email) {
         const token = AuthRepository.rand(6);
-        const createdDate = new Date();
-
-        const tokenPhone = new TokenPhone({
-            token: token,
-            phone,
-            createdDate,
-        });
-
-        tokenPhone.id = tokenPhone._id;
-
         try {
-            let savedTokenPhone = await tokenPhone.save();
-
-            // await twillio.messages.create({
-            //     body: `Verification code ${savedTokenPhone.token}`,
-            //     to: phone,
-            //     from: twillioNumber,
-            // });
+            sendMail(token, email);
         } catch (error) {
             throw new ApolloError(error);
         };
     };
 
-    async authenticateUser(token, phone) {
+    async authenticateUser(code, email) {
         try {
-            await this._isHaveRegisterToken(token, phone);
-            const user = await User.findOne({ phone });
-            const idForUser = user ? user.id : `us_${uniqid()}`;
-            const authToken = await this._createToken("USER", phone, idForUser);
-            const refreshToken = await this._createRefreshToken("USER", phone, idForUser);
+            await this._isHaveRegisterToken(code);
+            const idForUser = `us_${uniqid()}`;
+            const authToken = await this._createToken("USER", email, idForUser);
+            const refreshToken = await this._createRefreshToken("USER", email, idForUser);
             const tokenExpiresAfter = 86400;
             const refreshTokenExpiresAfter = 31363200;
 
@@ -81,11 +64,11 @@ class AuthRepository {
         return Math.floor(Math.random() * parseInt("8" + "9".repeat(digits - 1)) + parseInt("1" + "0".repeat(digits - 1)));
     };
 
-    async _createToken(role, phone, id) {
+    async _createToken(role, email, id) {
         const authToken = jsonwebtoken.sign(
             {
-                phone: phone,
                 role: role.toUpperCase(),
+                email,
                 id,
                 metadata: "authToken"
             },
@@ -95,12 +78,12 @@ class AuthRepository {
         return authToken;
     };
 
-    async _createRefreshToken(role, phone, id) {
+    async _createRefreshToken(role, email, id) {
         const refreshToken = jsonwebtoken.sign(
             {
                 message: "use this for refresh auth token",
                 metadata: "refreshToken",
-                phone: phone,
+                email,
                 role: role.toUpperCase(),
                 id,
             },
@@ -110,17 +93,17 @@ class AuthRepository {
         return refreshToken;
     };
 
-    async _isHaveRegisterToken(token, phone) {
-        if (token === "000000") {
+    async _isHaveRegisterToken(code) {
+        if (code === "000000") {
             return;
         }
-        const tokenPhone = await TokenPhone.findOne({ token, phone });
-        if (!tokenPhone && token !== "000000") {
+        const tokenPhone = await EmailToken.findOne({ token: code });
+        if (!tokenPhone && code !== "000000") {
             throw new ForbiddenError("Invalid token:Registration code are wrong!");
         }
 
         try {
-            await tokenPhone.remove(phone)
+            await EmailToken.deleteOne({ token: code });
         } catch (error) {
             throw new Error(error);
         }

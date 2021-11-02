@@ -8,14 +8,13 @@ class AuthenticationResolver {
   };
 
   Mutation = {
-    verifyPhone: async (_, { phone }) => {
-      await validator.validate(phone);
-      await repository.verify(phone);
+    verifyEmail: async (_, { email }) => {
+      await validator.validate(email);
+      await repository.verifyEmail(email);
     },
     
-    authenticateUser: async (_, { token, phone }) => {
-      await validator.validate(phone);
-      return await repository.authenticateUser(token, phone);
+    authenticateUser: async (_, { code, email }) => {
+      return await repository.authenticateUser(code, email);
     },
   };
 };
