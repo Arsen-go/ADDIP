@@ -8,7 +8,7 @@ const { resolvers } = require("./resolvers");
 
 const app = express();
 app.use(cors());
-
+const { ApolloServerPluginLandingPageGraphQLPlayground } = require("apollo-server-core");
 
 // graphql endpoint
 // const server = new ApolloServer({
@@ -87,6 +87,9 @@ async function startServer() {
     typeDefs,
     resolvers,
     playground: true,
+    plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
     context: async ({ req, connection, payload }) => {
       let authToken = null;
       let currentUser = null;
