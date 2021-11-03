@@ -87,6 +87,7 @@ async function startServer() {
     typeDefs,
     resolvers,
     playground: true,
+    introspection: true,
     plugins: [
       ApolloServerPluginLandingPageGraphQLPlayground(),
     ],
