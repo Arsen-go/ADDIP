@@ -11,6 +11,7 @@ const query = gql`
 
   type Mutation {
     #### Admin ####
+    signInAdmin (email: String!, password: String!): Token
     #### Mobile ####
     authenticateUser (code: String!, email: String!): Token
     createAttachment (id: String,contentType: String, pixelWidth: Float, pixelHeight: Float, size: String, name: String): Attachment!

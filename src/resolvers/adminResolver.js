@@ -6,7 +6,9 @@ class AdminResolver {
 
   Query = { };
 
-  Mutation = { };
+  Mutation = { 
+    signInAdmin: async (_, { email, password }) => await repository.signInAdmin(email, password),
+  };
 };
 
 module.exports = AdminResolver;

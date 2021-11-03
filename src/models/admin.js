@@ -17,11 +17,9 @@ const adminSchema = new Schema({
   },
   name: {
     type: String,
-    required: true,
   },
   isApproved: {
     type: Boolean,
-    required: true,
   },
   role: {
     type: String,
