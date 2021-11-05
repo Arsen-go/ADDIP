@@ -15,7 +15,8 @@ class AuthRepository {
     async authenticateUser(code, email) {
         try {
             await this._isHaveRegisterToken(code);
-            const idForUser = `us_${uniqid()}`;
+            const user = await User.findOne({ email });
+            const idForUser = user ? user.id : `us_${uniqid()}`;
             const authToken = await this._createToken("USER", email, idForUser);
             const refreshToken = await this._createRefreshToken("USER", email, idForUser);
             const tokenExpiresAfter = 86400;

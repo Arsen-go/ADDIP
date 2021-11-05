@@ -1,14 +1,16 @@
-const { UserRepository, AuthRepository, AttachmentRepository, AdminRepository } = require("../repository");
-const { UserValidator, AuthValidator, AttachmentValidator } = require("../validator");
+const { UserRepository, AuthRepository, AttachmentRepository, AdminRepository, QuestionRepository } = require("../repository");
+const { UserValidator, AuthValidator, AttachmentValidator, QuestionValidator } = require("../validator");
 const AdminResolver = require("./adminResolver");
 const AttachmentResolver = require("./attachmentResolver");
 const AuthenticationResolver = require("./authenticationResolver");
+const QuestionResolver = require("./questionResolver");
 const UserResolver = require("./userResolver");
 
 const resolvers = [
   new AdminResolver(new AdminRepository()),
   new AttachmentResolver(new AttachmentValidator(), new AttachmentRepository()),
   new AuthenticationResolver(new AuthValidator(), new AuthRepository()),
+  new QuestionResolver(new QuestionValidator(), new QuestionRepository()),
   new UserResolver(new UserValidator(), new UserRepository()),
 ];
 

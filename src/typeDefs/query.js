@@ -6,6 +6,7 @@ const query = gql`
     ##### Mobile ####
     profileAttachments (id: String!): [Attachment]
     thisUser: User
+    userQuestions (limit: Float, skip: Float): [Question]
     ##### General ####
   }
 
@@ -17,6 +18,7 @@ const query = gql`
     createAttachment (id: String,contentType: String, pixelWidth: Float, pixelHeight: Float, size: String, name: String): Attachment!
     verifyEmail (email: String!): String
     createUserProfile (firstName: String!, lastName: String!, birthDate: String!, gender: String!): User
+    createQuestion (headerText: String!, text: String!, keyWords: [String], attachmentIds: [String], faculty: String, course: Float): Question
     #### General ####
   }
 

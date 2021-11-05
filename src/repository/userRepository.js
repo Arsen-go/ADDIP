@@ -5,7 +5,7 @@ class UserRepository {
     async createUserProfile(currentUser, firstName, lastName, birthDate, gender) {
         try {
             const user = new User({
-                id: `us_${uniqid}`,
+                id: `us_${uniqid()}`,
                 firstName,
                 lastName,
                 birthDate: new Date(birthDate),

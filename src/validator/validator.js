@@ -1,6 +1,13 @@
 const { ValidationError, yup, emailValidator, phoneRegExp, moment } = require("../constants");
 
 class Validator {
+    keyWords = [];
+    faculties = [];
+    constructor() {
+        this.keyWords = ["JS", "JavaScript", "C++"];
+        this.faculties = ["IKM"]
+    };
+
     async validatePhoneNumber(phone) {
         if (phone) {
             let schema = yup.object().shape({
@@ -13,6 +20,18 @@ class Validator {
                 throw new ValidationError(error.message);
             };
         }
+    };
+
+    async validateKeyWords(keyWords) {
+        if (!keyWords) return;
+        keyWords.map((word) => {
+            if (!this.keyWords.includes(word)) throw new ValidationError(`${word} is not a key word.`);
+        });
+    };
+
+    async validateFaculty(faculty) {
+        if(!faculty) return;
+        if(!this.faculties.includes(faculty)) throw new ValidationError(`${faculty} is not a valid faculty.`);
     };
 
     async validateDate(date) {

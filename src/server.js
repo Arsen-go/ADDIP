@@ -54,6 +54,6 @@ const httpServer = http.createServer(app);
 app.use('/assets', express.static("assets"));
 
 app.listen(process.env.PORT || 4000, () => {
-  console.log(`🚀 Server ready at /${4000}${apolloServer.graphqlPath}`);
-  console.log(`🚀 Subscriptions ready /${4000}${apolloServer.subscriptionsPath}`);
+  console.log(`🚀 Server ready at /${4000}`);
+  console.log(`🚀 Subscriptions ready /${4000}`);
 });
