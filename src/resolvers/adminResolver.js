@@ -1,13 +1,21 @@
 const { roleAuthentication } = require("../auth");
 const { User } = require("../models");
 
+let validator, repository;
+
 class AdminResolver {
-  constructor() { };
+  constructor(adminValidator, adminRepository) {
+    repository = adminRepository;
+    validator = adminValidator;
+  };
 
-  Query = { };
+  Query = {};
 
-  Mutation = { 
-    signInAdmin: async (_, { email, password }) => await repository.signInAdmin(email, password),
+  Mutation = {
+    signInAdmin: async (_, { email, password }) => {
+      await validator.validateSignIn(email, password);
+      return await repository.signInAdmin(email, password);
+    },
   };
 };
 

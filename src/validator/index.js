@@ -1,11 +1,13 @@
-const AuthValidator = require("./authValidator");
-const UserValidator = require("./userValidator");
+const AdminValidator = require("./adminValidator");
 const AttachmentValidator = require("./attachmentValidator");
+const AuthValidator = require("./authValidator");
 const QuestionValidator = require("./questionValidator");
+const UserValidator = require("./userValidator");
 
 module.exports = {
-    AuthValidator,
-    UserValidator,
+    AdminValidator,
     AttachmentValidator,
+    AuthValidator,
     QuestionValidator,
+    UserValidator,
 };

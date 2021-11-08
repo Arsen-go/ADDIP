@@ -3,13 +3,13 @@ const { Admin } = require("../models");
 
 class AdminRepository {
     async signInAdmin(email, password) {
-        const isTrue = await Admin.findOne({ login, password });
+        const isTrue = await Admin.findOne({ email, password });
         if (!isTrue) {
             throw new ApolloError("Login or password is not true.")
         }
         try {
             const token = await this._createToken("ADMIN", email, `admin_${uniqid()}`);
-            return token;
+            return { authToken: token };
         } catch (error) {
             throw error;
         }
