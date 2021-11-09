@@ -19,6 +19,8 @@ const query = gql`
     verifyEmail (email: String!): String
     createUserProfile (firstName: String!, lastName: String!, birthDate: String!, gender: String!): User
     createQuestion (headerText: String!, text: String!, keyWords: [String], attachmentIds: [String], faculty: String, course: Float): Question
+    answerQuestion (questionId: String!, answer: String!, attachmentIds: [String]): Answer
+    setCorrectAnswer (answerId: String!): Answer
     #### General ####
   }
 

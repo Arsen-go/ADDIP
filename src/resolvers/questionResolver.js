@@ -30,6 +30,18 @@ class QuestionResolver {
             await validator.validateQuestion(headerText, text, keyWords, attachmentIds, faculty, course);
             return await repository.createQuestion(currentUser, headerText, text, keyWords, attachmentIds, faculty, course);
         }),
+
+        answerQuestion: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { questionId, answer, attachmentIds } = args;
+            await validator.validateAnswer(questionId, answer);
+            return await repository.answerQuestion(currentUser, questionId, answer, attachmentIds);
+        }),
+
+        setCorrectAnswer: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { answerId } = args;
+            return await repository.setCorrectAnswer(currentUser, answerId);
+        }),
+
     };
 };
 

@@ -22,6 +22,14 @@ class QuestionValidator extends Validator {
         });
         await this.validateYupSchema(schema, { skip, limit });
     };
+
+    async validateAnswer(questionId, answer) {
+        const schema = yup.object().shape({
+            questionId: yup.string().required(),
+            answer: yup.string().min(2),
+        });
+        await this.validateYupSchema(schema, { questionId, answer });
+    };
 };
 
 module.exports = QuestionValidator;
