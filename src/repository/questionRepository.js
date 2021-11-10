@@ -1,5 +1,6 @@
-const { uniqid, ApolloError } = require("../constants");
+const { uniqid, ApolloError, AWS } = require("../constants");
 const { Question, User, Answer, Attachment, Comment } = require("../models");
+const s3 = new AWS.S3();
 
 class QuestionRepository {
     async createQuestion(currentUser, headerText, text, keyWords, attachmentIds, faculty, course) {
@@ -212,6 +213,135 @@ class QuestionRepository {
         } catch (error) {
             throw new ApolloError(error, 500);
         }
+    };
+
+    async voteComment(currentUser, commentId) {
+        try {
+            const user = await User.findOne({ id: currentUser.id });
+            const comment = await Comment.findOne({ id: commentId });
+            if (!comment) throw ("Comment is not found or something went wrong.");
+            const vote = comment.vote ? ++comment.vote : 1;
+            comment.vote = vote;
+            if (comment.votedUsers && comment.votedUsers.length) {
+                comment.votedUsers.forEach((_id) => {
+                    if (_id.toString() === user._id.toString()) {
+                        throw ("You are already vote this comment.");
+                    }
+                });
+            }
+            comment.votedUsers.push(user._id);
+            await comment.save();
+            return comment;
+        } catch (error) {
+            throw new ApolloError(error, 500);
+        }
+    };
+
+    async deleteComment(currentUser, commentId) {
+        const user = await User.findOne({ id: currentUser.id });
+        const comment = await Comment.findOne({ owner: user._id, id: commentId });
+        if (!comment) throw new ApolloError("Comment is not your and you can not delete it.");
+
+        try {
+            if (comment.attachments && comment.attachments.length) {
+                await this._deleteAttachments(comment.attachments);
+            }
+            if (comment.question) {
+                await this._deleteCommentFromQuestion(comment.question, comment._id);
+            }
+            if (comment.answer) {
+                await this._deleteCommentFromAnswer(comment.answer, comment._id);
+            }
+            await Comment.deleteOne({ _id: comment._id });
+            return true;
+        } catch (error) {
+            throw new ApolloError(error, 500);
+        }
+    };
+
+    async deleteAnswer(currentUser, answerId) {
+        const user = await User.findOne({ id: currentUser.id });
+        const answer = await Answer.findOne({ id: answerId, owner: user._id });
+        if (!answer) throw new ApolloError("Answer is not your and you can not delete it.");
+        try {
+            if (answer.attachments && answer.attachments.length) {
+                await this._deleteAttachments(answer.attachments);
+            }
+            if (answer.comment && answer.comment.length) {
+                await this._deleteComments(answer.comment);
+            }
+            const question = await Question.findOne({ _id: answer.question });
+            if (question) {
+                let idsWithout = [];
+                question.answer.forEach((c) => {
+                    if (c.toString() !== answer._id.toString()) {
+                        idsWithout.push(c);
+                    }
+                });
+                question.answer = idsWithout;
+                if (answer.isThisTrue) {
+                    question.userThatAnswered = null;
+                }
+                await question.save();
+            }
+            await Answer.deleteOne({ _id: answer._id });
+            return true;
+        } catch (error) {
+            throw new ApolloError(error, 500);
+        }
+    };
+
+    async _deleteComments(comment_Ids) {
+        const comments = await Comment.find({ _id: comment_Ids });
+        let attachments_Ids = [];
+        for (let com of comments) {
+            if (com.attachments && com.attachments.length) {
+                com.attachments.forEach((c) => {
+                    attachments_Ids.push(c);
+                });
+            }
+        };
+        if (attachments_Ids.length) {
+            await this._deleteAttachments(attachments_Ids);
+        }
+        await Comment.deleteMany({ _id: comment_Ids });
+    };
+
+    async _deleteCommentFromQuestion(question_Id, comment_Id) {
+        let question = await Question.findOne({ _id: question_Id });
+        let idsWithout = [];
+        question.comment.forEach((c) => {
+            if (c.toString() !== comment_Id.toString()) {
+                idsWithout.push(c);
+            }
+        });
+        question.comment = idsWithout;
+        await question.save();
+    };
+
+    async _deleteCommentFromAnswer(answer_Id, comment_Id) {
+        let answer = await Answer.findOne({ _id: answer_Id });
+        let idsWithout = [];
+        answer.comment.forEach((c) => {
+            if (c.toString() !== comment_Id.toString()) {
+                idsWithout.push(c);
+            }
+        });
+        answer.comment = idsWithout;
+        await answer.save();
+    };
+
+    async _deleteAttachments(attachment_Ids) {
+        const attachments = await Attachment.find({ _id: attachment_Ids });
+        attachments.forEach((attach) => {
+            let params = { Bucket: "aws_bucket_for_app", Key: attach.fileId };
+
+            s3.deleteObject(params, (err) => {
+                if (err) console.log(err);
+                else console.log("deleted");
+            });
+        });
+        await Attachment.deleteMany({ _id: attachment_Ids });
     };
 
     async _getAttachmentObjectIds(attachmentIds) {

@@ -18,8 +18,8 @@ class QuestionValidator extends Validator {
     async validateEditQuestion(questionId, headerText, text, keyWords, attachmentIds, faculty, course) {
         const schema = yup.object().shape({
             questionId: yup.string().required(),
-            headerText: yup.string().min(5),
-            text: yup.string().min(5),
+            headerText: yup.string().min(2),
+            text: yup.string().min(2),
             attachmentIds: yup.array(),
             faculty: yup.string(),
             course: yup.number().min(1).max(6),

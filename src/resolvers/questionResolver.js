@@ -69,6 +69,21 @@ class QuestionResolver {
             const { answerId } = args;
             return await repository.voteAnswer(currentUser, answerId);
         }),
+
+        voteComment: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { commentId } = args;
+            return await repository.voteComment(currentUser, commentId);
+        }),
+
+        deleteComment: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { commentId } = args;
+            return await repository.deleteComment(currentUser, commentId);
+        }),
+
+        deleteAnswer: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { answerId } = args;
+            return await repository.deleteAnswer(currentUser, answerId);
+        }),
     };
 };
 

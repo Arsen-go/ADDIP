@@ -26,6 +26,9 @@ const query = gql`
     addCommentToAnswer (answerId: String!, text: String!, attachmentIds: [String]): Comment
     voteQuestion (questionId: String!): Question
     voteAnswer (answerId: String!): Answer
+    voteComment (commentId: String!): Comment
+    deleteComment (commentId: String!): Boolean
+    deleteAnswer (answerId: String!): Boolean
     #### General ####
   }
 
