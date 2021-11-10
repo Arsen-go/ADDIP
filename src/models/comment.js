@@ -16,8 +16,9 @@ const CommentSchema = new Schema({
         type: Number,
     },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    attachment: [{ type: Schema.Types.ObjectId, ref: "Attachment" }],
+    attachments: [{ type: Schema.Types.ObjectId, ref: "Attachment" }],
     answer: { type: Schema.Types.ObjectId, ref: "Answer" },
+    question: { type: Schema.Types.ObjectId, ref: "Question" },
 }, { timestamps: true });
 
 const Comment = mongoose.model("Comment", CommentSchema);

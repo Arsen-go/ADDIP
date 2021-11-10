@@ -8,7 +8,7 @@ type Comment {
     views: Int
     owner: User
     answer: [Answer]
-    attachment: [Attachment]
+    attachments: [Attachment]
   }
 `;
 

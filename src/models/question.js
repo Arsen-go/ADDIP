@@ -34,6 +34,8 @@ const QuestionSchema = new Schema({
     answer: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
     owner: { type: Schema.Types.ObjectId, ref: "User" },
     attachments: [{ type: Schema.Types.ObjectId, ref: "Attachment" }],
+    comment: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    votedUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
 }, { timestamps: true });
 
 const Question = mongoose.model("Question", QuestionSchema);

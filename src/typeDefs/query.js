@@ -19,8 +19,13 @@ const query = gql`
     verifyEmail (email: String!): String
     createUserProfile (firstName: String!, lastName: String!, birthDate: String!, gender: String!): User
     createQuestion (headerText: String!, text: String!, keyWords: [String], attachmentIds: [String], faculty: String, course: Float): Question
+    editQuestion (questionId: String!, headerText: String, text: String, keyWords: [String], attachmentIds: [String], faculty: String, course: Float): Question
     answerQuestion (questionId: String!, answer: String!, attachmentIds: [String]): Answer
     setCorrectAnswer (answerId: String!): Answer
+    addCommentToQuestion (questionId: String!, text: String!, attachmentIds: [String]): Comment
+    addCommentToAnswer (answerId: String!, text: String!, attachmentIds: [String]): Comment
+    voteQuestion (questionId: String!): Question
+    voteAnswer (answerId: String!): Answer
     #### General ####
   }
 

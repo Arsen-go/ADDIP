@@ -31,6 +31,12 @@ class QuestionResolver {
             return await repository.createQuestion(currentUser, headerText, text, keyWords, attachmentIds, faculty, course);
         }),
 
+        editQuestion: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { questionId, headerText, text, keyWords, attachmentIds, faculty, course } = args;
+            await validator.validateEditQuestion(questionId, headerText, text, keyWords, attachmentIds, faculty, course);
+            return await repository.editQuestion(currentUser, questionId, headerText, text, keyWords, attachmentIds, faculty, course);
+        }),
+
         answerQuestion: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
             const { questionId, answer, attachmentIds } = args;
             await validator.validateAnswer(questionId, answer);
@@ -42,6 +48,27 @@ class QuestionResolver {
             return await repository.setCorrectAnswer(currentUser, answerId);
         }),
 
+        addCommentToQuestion: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { questionId, text, attachmentIds } = args;
+            await validator.validateComment(questionId, text);
+            return await repository.addCommentToQuestion(currentUser, questionId, text, attachmentIds);
+        }),
+
+        addCommentToAnswer: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { answerId, text, attachmentIds } = args;
+            await validator.validateComment(answerId, text);
+            return await repository.addCommentToAnswer(currentUser, answerId, text, attachmentIds);
+        }),
+
+        voteQuestion: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { questionId } = args;
+            return await repository.voteQuestion(currentUser, questionId);
+        }),
+
+        voteAnswer: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { answerId } = args;
+            return await repository.voteAnswer(currentUser, answerId);
+        }),
     };
 };
 

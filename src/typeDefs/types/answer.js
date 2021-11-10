@@ -10,7 +10,7 @@ type Answer {
     comment: [Comment]
     question: Question
     owner: User
-    attachment: [Attachment]
+    attachments: [Attachment]
   }
 `;
 

@@ -21,8 +21,9 @@ const AnswerSchema = new Schema({
     },
     comment: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    attachment: [{ type: Schema.Types.ObjectId, ref: "Attachment" }],
+    attachments: [{ type: Schema.Types.ObjectId, ref: "Attachment" }],
     question: { type: Schema.Types.ObjectId, ref: "Question", required: true },
+    votedUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
 }, { timestamps: true });
 
 const Answer = mongoose.model("Answer", AnswerSchema);
