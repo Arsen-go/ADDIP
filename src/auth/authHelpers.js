@@ -4,7 +4,7 @@ const tradeTokenForUser = (token) => {
   if (token) {
     let decodedUser, decodedAdmin;
     token = token.replace("Bearer ", "");
-    const decoded =  jsonwebtoken.verify(token, process.env.JWT_SECRET);
+    const decoded =  jsonwebtoken.verify(token, "esimanushhayastaniarevahambarnemsirum");
 
     if (decoded.metadata === "authToken") {
       if (decoded.role === "USER") {

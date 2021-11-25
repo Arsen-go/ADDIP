@@ -22,7 +22,7 @@ class AuthRepository {
             const tokenExpiresAfter = 86400;
             const refreshTokenExpiresAfter = 31363200;
 
-            return { authToken, tokenExpiresAfter, refreshToken, refreshTokenExpiresAfter, };
+            return { authToken, tokenExpiresAfter };
         } catch (error) {
             throw new Error(error);
         }
@@ -45,11 +45,11 @@ class AuthRepository {
     };
 
     async refreshToken(refreshToken) {
-        const decoded = jsonwebtoken.verify(refreshToken, process.env.JWT_SECRET);
+        const decoded = jsonwebtoken.verify(refreshToken, "esimanushhayastaniarevahambarnemsirum");
 
         const authToken = jsonwebtoken.sign(
             { phone: decoded.phone, metadata: "authToken", id: decoded.id },
-            process.env.JWT_SECRET,
+            "esimanushhayastaniarevahambarnemsirum",
             { expiresIn: "1d" }
         );
         const tokenExpiresAfter = 86400;
@@ -73,7 +73,7 @@ class AuthRepository {
                 id,
                 metadata: "authToken"
             },
-            process.env.JWT_SECRET,
+            "esimanushhayastaniarevahambarnemsirum",
             { expiresIn: "1y" }
         );
         return authToken;
@@ -88,7 +88,7 @@ class AuthRepository {
                 role: role.toUpperCase(),
                 id,
             },
-            process.env.JWT_SECRET,
+            "esimanushhayastaniarevahambarnemsirum",
             { expiresIn: "2y" }
         );
         return refreshToken;
