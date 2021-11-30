@@ -4,14 +4,17 @@ const { uniqid } = require("../../constants");
 
 async function sendMail(token, email) {
     let transport = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
+        host: 'ysumail.am',
+        port: 25,
         secure: false,
         requireTLS: true,
         auth: {
-            user: "matevosyandev2000@gmail.com",
-            pass: "ars022074"
-        }
+            user: "arsen.matevosyan@ysumail.am",
+            pass: "6432438292"
+        },
+        tls: {
+            rejectUnauthorized: false
+        },
     });
 
     const mailOptions = {
