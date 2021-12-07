@@ -38,7 +38,7 @@ class AuthRepository {
             const refreshTokenExpiresAfter = 31363200;
             user.phone = phone;
             await user.save();
-            return { authToken, tokenExpiresAfter, refreshToken, refreshTokenExpiresAfter, };
+            return { authToken, tokenExpiresAfter, refreshToken, refreshTokenExpiresAfter };
         } catch (error) {
             throw new Error(error);
         }

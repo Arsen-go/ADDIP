@@ -11,7 +11,7 @@ const resolvers = [
   new AttachmentResolver(new AttachmentValidator(), new AttachmentRepository()),
   new AuthenticationResolver(new AuthValidator(), new AuthRepository()),
   new QuestionResolver(new QuestionValidator(), new QuestionRepository()),
-  new UserResolver(new UserValidator(), new UserRepository()),
+  new UserResolver(new UserValidator(), new UserRepository(new AuthRepository())),
 ];
 
 module.exports = {

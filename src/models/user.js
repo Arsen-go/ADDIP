@@ -29,6 +29,10 @@ const userSchema = new Schema({
   city: {
     type: String,
   },
+  password: {
+    type: String,
+    required: true,
+  },
   createdDate: {
     type: Date,
     default: Date.now(),

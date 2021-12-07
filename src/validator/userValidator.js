@@ -2,14 +2,14 @@ const Validator = require("./validator");
 const { yup, ValidationError } = require("../constants");
 
 class UserValidator extends Validator {
-  async validateCreateUserProfile(firstName, lastName, birthDate, gender) {
+  async validateCreateUserProfile(firstName, lastName, birthDate, password) {
     const schema = yup.object().shape({
       firstName: yup.string().required(),
       lastName: yup.string().required(),
       birthDate: yup.string().required(),
-      gender: yup.string().required(),
+      password: yup.string().required(),
     })
-    await this.validateYupSchema(schema, { firstName, lastName, birthDate, gender });
+    await this.validateYupSchema(schema, { firstName, lastName, birthDate, password });
     await this.validateUserBirthDate(birthDate);
   };
 
@@ -44,6 +44,16 @@ class UserValidator extends Validator {
     await this.validateDate(birthDate);
     await this.validateUserBirthDate(birthDate);
     await this.validatePhoneNumber(phone);
+  };
+
+  async validateUserLogin(email, password) {
+    const schema = yup.object().shape({
+      email: yup.string().required(),
+      password: yup.string().required(),
+    });
+
+    await this.validateEmail(email);
+    await this.validateYupSchema(schema, { email, password });
   };
 
   async validateSort(sortBy, sortOrder) {

@@ -15,9 +15,10 @@ const query = gql`
     signInAdmin (email: String!, password: String!): Token
     #### Mobile ####
     authenticateUser (code: String!, email: String!): Token
+    signInUser (email: String!, password: String!): Token
     createAttachment (id: String,contentType: String, pixelWidth: Float, pixelHeight: Float, size: String, name: String): Attachment!
     verifyEmail (email: String!): String
-    createUserProfile (firstName: String!, lastName: String!, birthDate: String!, gender: String!): User
+    createUserProfile (firstName: String!, lastName: String!, birthDate: String!, password: String!): User
     createQuestion (headerText: String!, text: String!, keyWords: [String], attachmentIds: [String], faculty: String, course: Float): Question
     editQuestion (questionId: String!, headerText: String, text: String, keyWords: [String], attachmentIds: [String], faculty: String, course: Float): Question
     answerQuestion (questionId: String!, answer: String!, attachmentIds: [String]): Answer
