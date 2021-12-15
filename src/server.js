@@ -25,7 +25,7 @@ async function startServer() {
       let subscriptionContext = null;
 
       try {
-        authToken = req ? req.headers.authentication : null;
+        authToken = req ? req.headers.authtoken : null;
         if (connection && connection.context) {
           subscriptionContext = connection.context;
         }
