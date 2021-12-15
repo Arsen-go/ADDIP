@@ -8,6 +8,7 @@ const query = gql`
     thisUser: User
     userQuestions (limit: Float, skip: Float): [Question]
     ##### General ####
+    deleteMe: String
   }
 
   type Mutation {

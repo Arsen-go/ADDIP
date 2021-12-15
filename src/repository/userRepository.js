@@ -39,6 +39,19 @@ class UserRepository {
             throw new Error(error, 555);
         }
     };
+
+    async deleteMe(currentUser) {
+        const user = await User.findOne({ id: currentUser.id });
+        if (!user) {
+            throw new ApolloError("Email or Password are wrong.", 404);
+        }
+        try {
+            await User.deleteOne({ _id: user._id });
+            return "";
+        } catch (error) {
+            throw new Error(error, 555);
+        }
+    }
 };
 
 module.exports = UserRepository;
