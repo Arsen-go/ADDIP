@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-// const uri = "mongodb+srv://ADR:socialnetwork@cluster0.duqbf.mongodb.net/helpMe?retryWrites=true&w=majority";
-const uri = `mongodb://localhost:27017/helpMe`;
+const uri = "mongodb+srv://ADR:socialnetwork@cluster0.duqbf.mongodb.net/helpMe?retryWrites=true&w=majority";
+// const connectionPath = `mongodb://localhost:27017/helpMe`;
 
 mongoose
   // eslint-disable-next-line no-undef
