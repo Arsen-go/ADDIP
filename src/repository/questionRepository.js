@@ -1,3 +1,4 @@
+const { array } = require("yup/lib/locale");
 const { uniqid, ApolloError, AWS } = require("../constants");
 const { Question, User, Answer, Attachment, Comment } = require("../models");
 const s3 = new AWS.S3();
@@ -42,6 +43,30 @@ class QuestionRepository {
         try {
             const questions = await Question.find({ owner: user._id }).skip(skip).limit(limit);
             return questions;
+        } catch (error) {
+            throw new ApolloError(error, 500);
+        }
+    };
+
+    async questions(skip, limit) {
+        try {
+            const questions = await Question.find().skip(skip).limit(limit);
+            return questions;
+        } catch (error) {
+            throw new ApolloError(error, 500);
+        }
+    };
+
+    async searchQuestions(text) {
+        try {
+            const questions = await Question.find({});
+            let arr = [];
+            for (const q of questions) {
+                if(q.text.includes(text)){
+                    arr.push(q);
+                }
+            }
+            return arr;
         } catch (error) {
             throw new ApolloError(error, 500);
         }

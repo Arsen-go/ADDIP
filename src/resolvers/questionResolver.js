@@ -14,6 +14,17 @@ class QuestionResolver {
             await validator.validateSkipAndLimit(skip, limit);
             return await repository.userQuestions(currentUser, skip, limit);
         }),
+
+        questions: roleAuthentication(["USER"], async (_, args) => {
+            const { skip, limit } = args;
+            await validator.validateSkipAndLimit(skip, limit);
+            return await repository.questions(skip, limit);
+        }),
+
+        searchQuestions: roleAuthentication(["USER"], async (_, args) => {
+            const { text } = args;
+            return await repository.searchQuestions(text);
+        }),
     };
 
     Question = {
