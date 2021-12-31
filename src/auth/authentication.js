@@ -1,8 +1,8 @@
 const { ApolloError } = require("../constants");
 
 const authenticated = (next) => async (root, args, context, info) => {
-  const { currentUser, admin } = context;
-  if (!currentUser && !admin) {
+  const { currentUser, currentAdmin } = context;
+  if (!currentUser && !currentAdmin) {
     throw new ApolloError("Unauthenticated!");
   }
 
@@ -10,8 +10,8 @@ const authenticated = (next) => async (root, args, context, info) => {
 };
 
 const roleAuthentication = (roles, next) => (root, args, context, info) => {
-  const { currentUser, admin } = context;
-  if (!currentUser && !admin) {
+  const { currentUser, currentAdmin } = context;
+  if (!currentUser && !currentAdmin) {
     throw new Error("Unauthenticated!");
   }
 
@@ -24,8 +24,8 @@ const roleAuthentication = (roles, next) => (root, args, context, info) => {
     role = currentUser.role;
   }
 
-  if (admin) {
-    role = admin.role;
+  if (currentAdmin) {
+    role = currentAdmin.role;
   }
   if (roles.includes(role)) {
     return next(root, args, context, info);

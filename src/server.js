@@ -22,6 +22,7 @@ async function startServer() {
     context: async ({ req, connection, payload }) => {
       let authToken = null;
       let currentUser = null;
+      let currentAdmin = null;
       let subscriptionContext = null;
 
       try {
@@ -31,8 +32,14 @@ async function startServer() {
         }
 
         if (authToken) {
-          const { decodedUser } = await tradeTokenForUser(authToken);
+          const { decodedUser, decodedAdmin } = await tradeTokenForUser(authToken);
           currentUser = decodedUser;
+          currentAdmin = decodedAdmin;
+          const context = {
+            currentUser,
+            currentAdmin
+          };
+          return context;
         }
       } catch (e) {
         console.log(e);

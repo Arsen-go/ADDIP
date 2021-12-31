@@ -95,6 +95,11 @@ class QuestionResolver {
             const { answerId } = args;
             return await repository.deleteAnswer(currentUser, answerId);
         }),
+
+        deleteQuestion: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
+            const { questionId } = args;
+            return await repository.deleteQuestion(currentUser, questionId);
+        }),
     };
 };
 

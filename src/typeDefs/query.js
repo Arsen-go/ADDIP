@@ -11,11 +11,13 @@ const query = gql`
     searchQuestions (text: String): [Question]
     ##### General ####
     deleteMe: String
+    getUsers (limit: Float!, skip: Float!): [User]
   }
 
   type Mutation {
     #### Admin ####
     signInAdmin (email: String!, password: String!): Token
+    #### General ####
     #### Mobile ####
     authenticateUser (code: String!, email: String!): Token
     signInUser (email: String!, password: String!): Token
@@ -33,6 +35,7 @@ const query = gql`
     voteComment (commentId: String!): Comment
     deleteComment (commentId: String!): Boolean
     deleteAnswer (answerId: String!): Boolean
+    deleteQuestion (questionId: String!): Boolean
     #### General ####
   }
 

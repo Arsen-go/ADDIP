@@ -23,7 +23,7 @@ class AdminRepository {
                 id,
                 metadata: "authToken"
             },
-            process.env.JWT_SECRET,
+            "esimanushhayastaniarevahambarnemsirum",
             { expiresIn: "1y" }
         );
         return authToken;

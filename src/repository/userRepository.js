@@ -51,6 +51,14 @@ class UserRepository {
         } catch (error) {
             throw new Error(error, 555);
         }
+    };
+
+    async getUsers(limit, skip) {
+        try {
+            return await User.find({}).limit(limit).skip(skip);
+        } catch (error) {
+            throw new Error(error, 555);
+        }
     }
 };
 

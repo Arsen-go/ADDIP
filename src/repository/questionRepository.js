@@ -62,7 +62,7 @@ class QuestionRepository {
             const questions = await Question.find({});
             let arr = [];
             for (const q of questions) {
-                if(q.text.includes(text)){
+                if (q.text.includes(text)) {
                     arr.push(q);
                 }
             }
@@ -262,6 +262,28 @@ class QuestionRepository {
         }
     };
 
+    async deleteQuestion(currentUser, questionId) {
+        const user = await User.findOne({ id: currentUser.id });
+        const question = await Question.findOne({ id: questionId, owner: user._id });
+        if (!question) throw new ApolloError("Question is not yours and you can not delete it.");
+        try {
+            if (question.attachments && question.attachments.length) {
+                await this._deleteAttachments(question.attachments);
+            }
+            if (question.comment && question.comment.length) {
+                await this._deleteComments(question.comment);
+            }
+            for (let z = 0; z < question.answer.length; ++z) {
+                const answer = await Answer.findOne({ _id: question.answer[z] });
+                await this.deleteAnswer(currentUser, answer.id);
+            }
+            await Question.deleteOne({ id: question.id });
+            return true;
+        } catch (error) {
+            throw new ApolloError(error, 500);
+        }
+    };
+
     async deleteComment(currentUser, commentId) {
         const user = await User.findOne({ id: currentUser.id });
         const comment = await Comment.findOne({ owner: user._id, id: commentId });
@@ -285,9 +307,8 @@ class QuestionRepository {
     };
 
     async deleteAnswer(currentUser, answerId) {
-        const user = await User.findOne({ id: currentUser.id });
-        const answer = await Answer.findOne({ id: answerId, owner: user._id });
-        if (!answer) throw new ApolloError("Answer is not your and you can not delete it.");
+        const answer = await Answer.findOne({ id: answerId });
+        if (!answer) throw new ApolloError("Answer is not exist.");
         try {
             if (answer.attachments && answer.attachments.length) {
                 await this._deleteAttachments(answer.attachments);

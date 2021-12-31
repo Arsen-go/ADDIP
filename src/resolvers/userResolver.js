@@ -13,6 +13,8 @@ class UserResolver {
     deleteMe: roleAuthentication(["USER"], async (_, { }, { currentUser }) => await repository.deleteMe(currentUser)),
 
     thisUser: roleAuthentication(["USER"], async (_, { }, { currentUser }) => await User.findOne({ id: currentUser.id })),
+
+    getUsers: roleAuthentication(["USER", "ADMIN"], async (_, { limit, skip }) => await repository.getUsers(limit, skip)),
   };
 
   User = {};
