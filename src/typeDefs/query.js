@@ -9,6 +9,9 @@ const query = gql`
     userQuestions (limit: Float, skip: Float): [Question]
     questions (limit: Float, skip: Float): [Question]
     searchQuestions (text: String): [Question]
+    #Chat#
+    getConversations: [Conversation]
+    conversationById (conversationId: String!): Conversation
     ##### General ####
     deleteMe: String
     getUsers (limit: Float!, skip: Float!): [User]
@@ -36,12 +39,22 @@ const query = gql`
     deleteComment (commentId: String!): Boolean
     deleteAnswer (answerId: String!): Boolean
     deleteQuestion (questionId: String!): Boolean
+
+    #Chat#
+    createConversation (title: String!, desc: String, userId: String): Conversation!
+    createMessage (message: String, conversationId: String!): Message
+
     #### General ####
+  }
+
+  type Subscription {
+    messageAdded (conversationId: String!): Message
   }
 
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 `;
 

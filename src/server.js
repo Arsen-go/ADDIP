@@ -8,6 +8,8 @@ const { resolvers } = require("./resolvers");
 const app = express();
 app.use(cors());
 const { ApolloServerPluginLandingPageGraphQLPlayground } = require("apollo-server-core");
+const { SubscriptionServer } = require('subscriptions-transport-ws');
+const { execute, subscribe } = require('graphql');
 
 let apolloServer = null;
 async function startServer() {
@@ -19,6 +21,29 @@ async function startServer() {
     plugins: [
       ApolloServerPluginLandingPageGraphQLPlayground(),
     ],
+
+    subscriptions: {
+      onConnect: async (connectionParams, webSocket, context) => {
+        if (connectionParams.authentication) {
+          const { decodedUser, decodedDriver, decodedAdmin } = await tradeTokenForUser(connectionParams.authentication);
+          currentUser = decodedUser;
+          currentDriver = decodedDriver;
+          admin = decodedAdmin;
+          const context = {
+            currentUser,
+            currentDriver,
+            admin
+          };
+
+          return context;
+        }
+
+        throw new Error('Missing auth token!');
+      },
+      onDisconnect: () => {
+        console.log("disconnected user");
+      },
+    },
     context: async ({ req, connection, payload }) => {
       let authToken = null;
       let currentUser = null;
@@ -53,6 +78,14 @@ async function startServer() {
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });
+  // const subscriptionServer = SubscriptionServer.create({
+  //   schema,
+  //   execute,
+  //   subscribe,
+  // }, {
+  //   server: apolloServer,
+  //   path: '/graphql',
+  // });
 }
 startServer();
 

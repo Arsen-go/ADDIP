@@ -3,6 +3,8 @@ const AttachmentValidator = require("./attachmentValidator");
 const AuthValidator = require("./authValidator");
 const QuestionValidator = require("./questionValidator");
 const UserValidator = require("./userValidator");
+const ConversationValidator = require("./conversationValidator");
+const MessageValidator = require("./messageValidator");
 
 module.exports = {
     AdminValidator,
@@ -10,4 +12,6 @@ module.exports = {
     AuthValidator,
     QuestionValidator,
     UserValidator,
+    ConversationValidator,
+    MessageValidator,
 };
