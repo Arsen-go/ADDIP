@@ -8,7 +8,7 @@ const { resolvers } = require("./resolvers");
 const typeDefs = require("./typeDefs");
 const { tradeTokenForUser } = require("./auth");
 const cors = require("cors");
-const { ApolloServer, express, bodyParser } = require("./constants");
+const { ApolloServer, express, bodyParser, ApolloServerPluginLandingPageGraphQLPlayground } = require("./constants");
 
 (async function () {
   const app = express();
@@ -67,15 +67,17 @@ const { ApolloServer, express, bodyParser } = require("./constants");
           : "",
       };
     },
-    plugins: [{
-      async serverWillStart() {
-        return {
-          async drainServer() {
-            subscriptionServer.close();
-          }
-        };
-      }
-    }],
+    plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground(),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              subscriptionServer.close();
+            }
+          };
+        }
+      }],
   });
   await server.start();
   server.applyMiddleware({ app });

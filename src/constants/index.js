@@ -1,5 +1,6 @@
 const http = require("http");
 const { ApolloServer } = require("apollo-server-express");
+const { ApolloServerPluginLandingPageGraphQLPlayground } = require("apollo-server-core");
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -26,6 +27,7 @@ module.exports = {
     ApolloError,
     ValidationError,
     makeExecutableSchema,
+    ApolloServerPluginLandingPageGraphQLPlayground,
     ForbiddenError,
     express,
     bodyParser,
