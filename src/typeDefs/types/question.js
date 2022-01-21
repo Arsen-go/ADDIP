@@ -15,6 +15,7 @@ type Question {
     attachments: [Attachment]
     faculty: String
     course: Int
+    comments: [Comment]
   }
 `;
 

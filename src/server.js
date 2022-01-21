@@ -1,53 +1,41 @@
-require("dotenv").config();
-const { http, ApolloServer, express, bodyParser } = require("./constants");
 require("./db");
-const cors = require("cors");
-const { tradeTokenForUser } = require("./auth");
-const typeDefs = require("./typeDefs");
+require("dotenv").config();
+const { createServer } = require("http")
+const { execute, subscribe } = require("graphql");
+const { SubscriptionServer } = require("subscriptions-transport-ws");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
 const { resolvers } = require("./resolvers");
-const app = express();
-app.use(cors());
-const { ApolloServerPluginLandingPageGraphQLPlayground } = require("apollo-server-core");
-const { SubscriptionServer } = require('subscriptions-transport-ws');
-const { execute, subscribe } = require('graphql');
+const typeDefs = require("./typeDefs");
+const { tradeTokenForUser } = require("./auth");
+const cors = require("cors");
+const { ApolloServer, express, bodyParser } = require("./constants");
 
-let apolloServer = null;
-async function startServer() {
-  apolloServer = new ApolloServer({
+(async function () {
+  const app = express();
+  app.use(cors());
+  const httpServer = createServer(app);
+  app.use(bodyParser.urlencoded({ extended: false }));
+
+  const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
-    playground: true,
+  });
+
+  const subscriptionServer = SubscriptionServer.create(
+    { schema, execute, subscribe },
+    { server: httpServer, path: '/graphql' }
+  );
+
+  const server = new ApolloServer({
+    schema,
+    cacheControl: false,
     introspection: true,
-    plugins: [
-      ApolloServerPluginLandingPageGraphQLPlayground(),
-    ],
-
-    subscriptions: {
-      onConnect: async (connectionParams, webSocket, context) => {
-        if (connectionParams.authentication) {
-          const { decodedUser, decodedDriver, decodedAdmin } = await tradeTokenForUser(connectionParams.authentication);
-          currentUser = decodedUser;
-          currentDriver = decodedDriver;
-          admin = decodedAdmin;
-          const context = {
-            currentUser,
-            currentDriver,
-            admin
-          };
-
-          return context;
-        }
-
-        throw new Error('Missing auth token!');
-      },
-      onDisconnect: () => {
-        console.log("disconnected user");
-      },
-    },
+    playground: true,
     context: async ({ req, connection, payload }) => {
       let authToken = null;
       let currentUser = null;
-      let currentAdmin = null;
+      let currentDriver = null;
+      let admin = null;
       let subscriptionContext = null;
 
       try {
@@ -57,14 +45,10 @@ async function startServer() {
         }
 
         if (authToken) {
-          const { decodedUser, decodedAdmin } = await tradeTokenForUser(authToken);
+          const { decodedUser, decodedDriver, decodedAdmin } = await tradeTokenForUser(authToken);
           currentUser = decodedUser;
-          currentAdmin = decodedAdmin;
-          const context = {
-            currentUser,
-            currentAdmin
-          };
-          return context;
+          currentDriver = decodedDriver;
+          admin = decodedAdmin;
         }
       } catch (e) {
         console.log(e);
@@ -73,27 +57,31 @@ async function startServer() {
       return {
         authToken,
         currentUser,
+        currentDriver,
+        admin,
+        subscriber: subscriptionContext,
+        ipAddress: req
+          ? req.connection
+            ? req.connection.remoteAddress
+            : ""
+          : "",
       };
     },
+    plugins: [{
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            subscriptionServer.close();
+          }
+        };
+      }
+    }],
   });
-  await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
-  // const subscriptionServer = SubscriptionServer.create({
-  //   schema,
-  //   execute,
-  //   subscribe,
-  // }, {
-  //   server: apolloServer,
-  //   path: '/graphql',
-  // });
-}
-startServer();
+  await server.start();
+  server.applyMiddleware({ app });
 
-app.use(bodyParser.urlencoded({ extended: false }));
-const httpServer = http.createServer(app);
-app.use('/assets', express.static("assets"));
-
-app.listen(process.env.PORT || 4000, () => {
-  console.log(`🚀 Server ready at /${4000}`);
-  console.log(`🚀 Subscriptions ready /${4000}`);
-});
+  const PORT = 4000;
+  httpServer.listen(PORT, () =>
+    console.log(`Server is now running on http://localhost:${PORT}/graphql`)
+  );
+})();

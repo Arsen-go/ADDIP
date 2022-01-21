@@ -33,6 +33,14 @@ class QuestionResolver {
         answer: async (question) => await repository.getQuestionAnswers(question),
 
         attachments: async (question) => await repository.getQuestionAttachments(question),
+
+        comments: async (question) => await repository.getQuestionComments(question),
+    };
+
+    Comment = {
+        question: async (comment) => await repository.getQuestion(comment.question),
+
+        answer: async (comment) => await repository.getAnswer(comment.answer),
     };
 
     Mutation = {

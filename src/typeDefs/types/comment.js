@@ -9,6 +9,7 @@ type Comment {
     owner: User
     answer: [Answer]
     attachments: [Attachment]
+    question: Question
   }
 `;
 

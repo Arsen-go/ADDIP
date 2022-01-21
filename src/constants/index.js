@@ -1,5 +1,6 @@
 const http = require("http");
 const { ApolloServer } = require("apollo-server-express");
+const { makeExecutableSchema } = require('@graphql-tools/schema')
 const express = require("express");
 const bodyParser = require("body-parser");
 const uniqid = require("uniqid");
@@ -24,6 +25,7 @@ module.exports = {
     ApolloServer,
     ApolloError,
     ValidationError,
+    makeExecutableSchema,
     ForbiddenError,
     express,
     bodyParser,

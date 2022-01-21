@@ -337,6 +337,34 @@ class QuestionRepository {
         }
     };
 
+    async getQuestionComments(question) {
+        try {
+            let comments = [];
+            for (const commentId of question.comment) {
+                comments.push(await Comment.findOne({ _id: commentId }));
+            }
+            return comments;
+        } catch (error) {
+            throw new ApolloError(error, 500);
+        }
+    };
+
+    async getQuestion(question_id) {
+        try {
+            return await Question.findOne({ _id: question_id });
+        } catch (error) {
+            throw new ApolloError(error);
+        };
+    };
+
+    async getAnswer(answer_id) {
+        try {
+            return await Answer.findOne({ _id: answer_id });
+        } catch (error) {
+            throw new ApolloError(error);
+        };
+    };
+
     async _deleteComments(comment_Ids) {
         const comments = await Comment.find({ _id: comment_Ids });
         let attachments_Ids = [];
