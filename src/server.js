@@ -81,7 +81,7 @@ const { ApolloServer, express, bodyParser } = require("./constants");
   server.applyMiddleware({ app });
 
   const PORT = 4000;
-  httpServer.listen(PORT || process.env.PORT, () =>
+  httpServer.listen(process.env.PORT || PORT, () =>
     console.log(`Server is now running on http://localhost:${PORT}/graphql`)
   );
 })();
