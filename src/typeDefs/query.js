@@ -49,6 +49,8 @@ const query = gql`
 
   type Subscription {
     messageAdded (conversationId: String!): Message
+    questionAdded: Question
+    questionAnswered (questionIds: [String!]): Question
   }
 
   schema {

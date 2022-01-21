@@ -1,5 +1,5 @@
 const { array } = require("yup/lib/locale");
-const { uniqid, ApolloError, AWS } = require("../constants");
+const { uniqid, ApolloError, AWS, pubsub } = require("../constants");
 const { Question, User, Answer, Attachment, Comment } = require("../models");
 const s3 = new AWS.S3();
 
@@ -18,6 +18,8 @@ class QuestionRepository {
                 owner: user._id
             });
             await question.save();
+            pubsub.publish('questionAdded', { questionAdded: question, user: user });
+
             return question;
         } catch (error) {
             throw new ApolloError(error, 500);
@@ -36,6 +38,30 @@ class QuestionRepository {
         } catch (error) {
             throw new ApolloError(error, 500);
         }
+    };
+
+    async onQuestionCreate(payload, variables, root) {
+        try {
+            return true;// here will be condition in what time to send a subscription data at the moment nondition is not required
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    };
+
+    async isQuestionAnswered(payload, variables, root) {
+        try {
+            for (const qid of variables.questionIds) {
+                const question = await Question.findOne({ id: qid });
+                if (payload.questionAnswered.id === qid && payload.currentUser._id.toString() === question.owner.toString()) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (error) {
+            throw new ApolloError(error);
+        };
     };
 
     async userQuestions(currentUser, skip, limit) {
@@ -113,6 +139,8 @@ class QuestionRepository {
             await newAnswer.save();
             question.answer.push(newAnswer._id);
             await question.save();
+            pubsub.publish('questionAnswered', { questionAnswered: question, currentUser: user });
+
             return newAnswer;
         } catch (error) {
             throw new ApolloError(error, 500);

@@ -1,4 +1,5 @@
 const { roleAuthentication } = require("../auth");
+const { pubsub, withFilter } = require("../constants");
 
 let validator, repository;
 
@@ -6,6 +7,24 @@ class QuestionResolver {
     constructor(questionValidator, questionRepository) {
         validator = questionValidator;
         repository = questionRepository;
+    };
+
+    Subscription = {
+        questionAdded: {
+            subscribe: withFilter((_, variables, context) => pubsub.asyncIterator('questionAdded'),
+                async (payload, variables, root) => {
+                    return await repository.onQuestionCreate(payload, variables, root);
+                }
+            )
+        },
+
+        questionAnswered: {
+            subscribe: withFilter((_, variables, context) => pubsub.asyncIterator('questionAnswered'),
+                async (payload, variables, root) => {
+                    return await repository.isQuestionAnswered(payload, variables, root);
+                }
+            )
+        },
     };
 
     Query = {
