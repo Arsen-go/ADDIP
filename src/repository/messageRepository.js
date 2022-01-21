@@ -10,12 +10,12 @@ class MessageRepository {
 
         let isHavePermissionToWriteMessage = false;
         conversation.users.forEach((u) => {
-            if(u.toString() == user._id.toString()) {
+            if (u.toString() == user._id.toString()) {
                 isHavePermissionToWriteMessage = true;
             }
         })
-        if(conversation.owner.toString() == user._id.toString()) isHavePermissionToWriteMessage = true;
-        if(isHavePermissionToWriteMessage == false) throw new ApolloError("You don't have permission to write message in this conversation.");
+        if (conversation.owner.toString() == user._id.toString()) isHavePermissionToWriteMessage = true;
+        if (isHavePermissionToWriteMessage == false) throw new ApolloError("You don't have permission to write message in this conversation.");
 
         try {
             const dataMessage = new Message({
@@ -25,7 +25,7 @@ class MessageRepository {
                 createdDate: new Date(),
                 owner: user._id,
             });
-    
+
             const savedMessage = await dataMessage.save();
             pubsub.publish('messageAdded', { messageAdded: savedMessage, conversationId: conversation.id });
 
@@ -34,7 +34,7 @@ class MessageRepository {
             throw new ApolloError(error, 555);
         }
     };
-    
+
     async onMessageCreateDelete(payload, variables, root) {
         try {
             if (payload.conversationId === variables.conversationId && root && root.currentUser) {
@@ -59,7 +59,7 @@ class MessageRepository {
         }
     };
 
-    
+
     async setLookedConversationMessages(conversation, user) {
         const messages = await Message.find({ $and: [{ conversation: conversation._id }, { lookedUsers: { $nin: user._id } }] });
         const updatedMessages = [];
@@ -96,6 +96,19 @@ class MessageRepository {
         const savedMessageLookedDate = await messageLookedDate.save();
 
         return savedMessageLookedDate;
+    };
+
+    async getMessagesByConversationId(currentUser, conversationId, skip, limit) {
+        const user = await User.findOne({ id: currentUser.id });
+        try {
+            const conversation = await Conversation.findOne({ id: conversationId, $or: [{ owner: user._id }, { users: user._id }] });
+            if (!conversation) {
+                throw "You don't have access to this conversation.";
+            }
+            return await Message.find({ conversation: conversation._id }).sort({ createdAt: -1 }).skip(skip).limit(limit);
+        } catch (error) {
+            throw new ApolloError(error);
+        };
     };
 };
 

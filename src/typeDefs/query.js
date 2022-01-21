@@ -11,6 +11,7 @@ const query = gql`
     searchQuestions (text: String): [Question]
     #Chat#
     getConversations: [Conversation]
+    messagesByConversationId (conversationId: String, limit: Int, skip: Int): [Message]
     conversationById (conversationId: String!): Conversation
     ##### General ####
     deleteMe: String

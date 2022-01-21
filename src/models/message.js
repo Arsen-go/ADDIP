@@ -24,7 +24,7 @@ const MessageSchema = new Schema({
   attachments: [{ type: Schema.Types.ObjectId, ref: 'Attachment' }],
   conversation: { type: Schema.Types.ObjectId, ref: 'Conversation', required: true },
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-});
+}, { timestamps: true });
 
 const Message = mongoose.model('Message', MessageSchema);
 module.exports = { Message };

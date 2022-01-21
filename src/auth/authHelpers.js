@@ -4,7 +4,7 @@ const tradeTokenForUser = (token) => {
   if (token) {
     let decodedUser, decodedAdmin;
     token = token.replace("Bearer ", "");
-    const decoded =  jsonwebtoken.verify(token, "esimanushhayastaniarevahambarnemsirum");
+    const decoded = jsonwebtoken.verify(token, "esimanushhayastaniarevahambarnemsirum");
 
     if (decoded.metadata === "authToken") {
       if (decoded.role === "USER") {
@@ -12,6 +12,10 @@ const tradeTokenForUser = (token) => {
       }
 
       if (decoded.role === "ADMIN") {
+        decodedAdmin = decoded;
+      }
+
+      if (decoded.role === "WORKER") {
         decodedAdmin = decoded;
       }
     }

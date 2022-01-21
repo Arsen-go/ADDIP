@@ -78,7 +78,12 @@ class MessageResolver {
     //         },
     //     };
 
-    //     Query = {
+    Query = {
+        messagesByConversationId: roleAuthentication(["USER", "WORKER"], async (_, args, { currentUser }) => {
+            const { conversationId, skip, limit } = args;
+            return await repository.getMessagesByConversationId(currentUser, conversationId, skip, limit);
+        }),
+    };
     //         allMessages: authenticated(async (root, { }, context) => {
     //             const user = context.currentUser;
     //             try {
