@@ -7,7 +7,7 @@ const query = gql`
     profileAttachments (id: String!): [Attachment]
     thisUser: User
     userQuestions (limit: Int, skip: Int): [Question]
-    questions (limit: Float, skip: Float): [Question]
+    questions (limit: Int, skip: Int): [Question]
     searchQuestions (text: String): [Question]
     #Chat#
     getConversations: [Conversation]
@@ -15,7 +15,7 @@ const query = gql`
     conversationById (conversationId: String!): Conversation
     ##### General ####
     deleteMe: String
-    getUsers (limit: Float!, skip: Float!): [User]
+    getUsers (limit: Int!, skip: Int!): [User]
   }
 
   type Mutation {
