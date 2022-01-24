@@ -48,7 +48,7 @@ const { ApolloServer, express, bodyParser, ApolloServerPluginLandingPageGraphQLP
           const { decodedUser, decodedDriver, decodedAdmin } = await tradeTokenForUser(authToken);
           currentUser = decodedUser;
           currentDriver = decodedDriver;
-          admin = decodedAdmin;
+          currentAdmin = decodedAdmin;
         }
       } catch (e) {
         console.log(e);
@@ -58,7 +58,7 @@ const { ApolloServer, express, bodyParser, ApolloServerPluginLandingPageGraphQLP
         authToken,
         currentUser,
         currentDriver,
-        admin,
+        currentAdmin,
         subscriber: subscriptionContext,
         ipAddress: req
           ? req.connection

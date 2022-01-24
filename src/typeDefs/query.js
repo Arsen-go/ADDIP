@@ -6,7 +6,7 @@ const query = gql`
     ##### Mobile ####
     profileAttachments (id: String!): [Attachment]
     thisUser: User
-    userQuestions (limit: Float, skip: Float): [Question]
+    userQuestions (limit: Int, skip: Int): [Question]
     questions (limit: Float, skip: Float): [Question]
     searchQuestions (text: String): [Question]
     #Chat#
