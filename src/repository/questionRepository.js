@@ -106,6 +106,14 @@ class QuestionRepository {
         }
     };
 
+    async getAnswerOwner(answer) {
+        try {
+            return await User.findOne({ _id: answer.owner });
+        } catch (error) {
+            throw new ApolloError(error, 500);
+        }
+    };
+
     async getQuestionAnswers(question) {
         try {
             return await Answer.find({ _id: question.answer });

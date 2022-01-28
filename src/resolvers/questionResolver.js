@@ -62,6 +62,10 @@ class QuestionResolver {
         answer: async (comment) => await repository.getAnswer(comment.answer),
     };
 
+    Answer = {
+        owner: async (answer) => await repository.getUser(answer),
+    };
+
     Mutation = {
         createQuestion: roleAuthentication(["USER"], async (_, args, { currentUser }) => {
             const { headerText, text, keyWords, attachmentIds, faculty, course } = args;
