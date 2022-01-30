@@ -1,6 +1,6 @@
 const http = require("http");
 const { ApolloServer } = require("apollo-server-express");
-const { ApolloServerPluginLandingPageGraphQLPlayground } = require("apollo-server-core");
+const { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginLandingPageProductionDefault } = require("apollo-server-core");
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -23,6 +23,7 @@ const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?
 module.exports = {
     phoneRegExp,
     http,
+    ApolloServerPluginLandingPageProductionDefault,
     ApolloServer,
     ApolloError,
     ValidationError,
