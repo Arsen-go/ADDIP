@@ -1,4 +1,4 @@
-const { User, Conversation } = require("../models");
+const { User, Conversation, Message } = require("../models");
 const { uniqid, ApolloError } = require("../constants");
 
 class ConversationRepository {
@@ -46,6 +46,15 @@ class ConversationRepository {
         }
     };
 
+    async deleteConversation(conversation) {
+        try {
+            await Message.deleteMany({ conversation: conversation._id });
+            await Conversation.deleteOne({ _id: conversation._id });
+        } catch (error) {
+            throw new Error(error, 500);
+        }
+    };
+
     //     async removeConversationInvite(inviteId) {
     //         const invite = await ConversationInvite.findOne({ id: inviteId }).populate("conversation");
     //         if (!invite) {
@@ -59,23 +68,23 @@ class ConversationRepository {
     //         return await invite.remove();
     //     };
 
-    //     async deleteConversation(conversationIds, phone) {
-    //         const deleteOneConversations = async (conversationId) => {
-    //             const user = await User.findOne({ phone });
-    //             const conversation = await Conversation.findOne({ id: conversationId });
-    //             if (!conversation) {
-    //                 throw new ApolloError(translate('This group no longer exists.',`${user.country}`));
-    //             }
-    //             const role = await Role.findOne({ $and: [{ workspace: conversation.workspace }, { owner: user._id }] });
-    //             if (!(conversation.owner.toString() === user._id.toString() || role.role === 'ADMIN')) {
-    //                 throw new ForbiddenError("Conversation not exist or you have no permission to delete this conversation")
-
-    //             }
-
-    //             await this._deleteConversation(conversation.id);
+    // async deleteConversation(conversationIds, phone) {
+    //     const deleteOneConversations = async (conversationId) => {
+    //         const user = await User.findOne({ phone });
+    //         const conversation = await Conversation.findOne({ id: conversationId });
+    //         if (!conversation) {
+    //             throw new ApolloError(translate('This group no longer exists.', `${user.country}`));
     //         }
-    //         await from(conversationIds).pipe(map(async (id) => await deleteOneConversations(id))).toPromise();
-    //     };
+    //         const role = await Role.findOne({ $and: [{ workspace: conversation.workspace }, { owner: user._id }] });
+    //         if (!(conversation.owner.toString() === user._id.toString() || role.role === 'ADMIN')) {
+    //             throw new ForbiddenError("Conversation not exist or you have no permission to delete this conversation")
+
+    //         }
+
+    //         await this._deleteConversation(conversation.id);
+    //     }
+    //     await from(conversationIds).pipe(map(async (id) => await deleteOneConversations(id))).toPromise();
+    // };
 
     //     async _deleteConversation(conversationId) {
     //         const conversation = await Conversation.findOne({ id: conversationId });
@@ -150,4 +159,4 @@ class ConversationRepository {
     //     };
 };
 
-module.exports = ConversationRepository;
+module.exports = new ConversationRepository();

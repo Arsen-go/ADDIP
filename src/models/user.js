@@ -37,6 +37,12 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  faculty: {
+    type: String,
+  },
+  course: {
+    type: Number,
+  },
   role: {
     type: String,
     default: "USER",

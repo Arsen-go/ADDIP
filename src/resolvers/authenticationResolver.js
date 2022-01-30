@@ -8,9 +8,9 @@ class AuthenticationResolver {
   };
 
   Mutation = {
-    verifyEmail: async (_, { email }) => {
+    verifyEmail: async (_, { email, isVisitor }) => {
       await validator.validate(email);
-      await repository.verifyEmail(email);
+      await repository.verifyEmail(email, isVisitor);
     },
     
     authenticateUser: async (_, { code, email }) => {

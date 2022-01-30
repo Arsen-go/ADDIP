@@ -88,7 +88,7 @@ class QuestionRepository {
             const questions = await Question.find({});
             let arr = [];
             for (const q of questions) {
-                if (q.text.includes(text)) {
+                if (q.headerText.includes(text)) {
                     arr.push(q);
                 }
             }
@@ -385,9 +385,43 @@ class QuestionRepository {
         }
     };
 
-    async getQuestion(question_id) {
+    async getQuestionByObjectId(question_id) {
         try {
             return await Question.findOne({ _id: question_id });
+        } catch (error) {
+            throw new ApolloError(error);
+        };
+    };
+
+    async getQuestion(questionId) {
+        try {
+            return await Question.findOne({ id: questionId });
+        } catch (error) {
+            throw new ApolloError(error);
+        };
+    };
+
+    async getAnswersByQuestionId(questionId) {
+        const question = await this.getQuestion(questionId);
+        try {
+            return await Answer.find({ question: question._id });
+        } catch (error) {
+            throw new ApolloError(error);
+        };
+    };
+
+    async getAnswerComments(answer) {
+        try {
+            const comments = await Comment.find({ _id: answer.comment });
+            return comments;
+        } catch (error) {
+            throw new ApolloError(error);
+        };
+    };
+
+    async getUser(answer) {
+        try {
+            return await User.findOne({ _id: answer.owner });
         } catch (error) {
             throw new ApolloError(error);
         };
@@ -462,4 +496,4 @@ class QuestionRepository {
     };
 };
 
-module.exports = QuestionRepository;
+module.exports = new QuestionRepository();

@@ -2,32 +2,30 @@ const Validator = require("./validator");
 const { yup, ValidationError } = require("../constants");
 
 class UserValidator extends Validator {
-  async validateCreateUserProfile(firstName, lastName, birthDate, password) {
+  async validateCreateUserProfile(firstName, lastName, birthDate, password, faculty, course) {
     const schema = yup.object().shape({
       firstName: yup.string().required(),
       lastName: yup.string().required(),
       birthDate: yup.string().required(),
       password: yup.string().required(),
+      faculty: yup.string(),
+      course: yup.number().integer().min(1, "Նման կուրս գոյություն չունի․").max(5, "Նման կուրս գոյություն չունի․"),
     })
-    await this.validateYupSchema(schema, { firstName, lastName, birthDate, password });
+    await this.validateYupSchema(schema, { firstName, lastName, birthDate, password, faculty, course });
     await this.validateUserBirthDate(birthDate);
   };
 
-  async validateEditDetails(args) {
-    const { birthDate, email, phone } = args;
+  async validateEditDetails(firstName, lastName, birthDate, password, faculty, course) {
     const schema = yup.object().shape({
       firstName: yup.string(),
       lastName: yup.string(),
-      email: yup.string(),
       birthDate: yup.string(),
-      country: yup.string(),
-      city: yup.string(),
-      phone: yup.string()
+      password: yup.string(),
+      faculty: yup.string(),
+      course: yup.number().integer().min(1, "Նման կուրս գոյություն չունի․").max(5, "Նման կուրս գոյություն չունի․"),
     })
-    await this.validateYupSchema(schema, args);
-    await this.validateEmail(email);
+    await this.validateYupSchema(schema, { firstName, lastName, birthDate, password, faculty, course });
     await this.validateUserBirthDate(birthDate);
-    await this.validatePhoneNumber(phone);
   };
 
   async validate(input) {

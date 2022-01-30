@@ -20,9 +20,14 @@ class UserResolver {
   User = {};
 
   Mutation = {
-    createUserProfile: roleAuthentication(["USER"], async (_, { firstName, lastName, birthDate, password }, { currentUser }) => {
-      await validator.validateCreateUserProfile(firstName, lastName, birthDate, password);
-      return await repository.createUserProfile(currentUser, firstName, lastName, birthDate, password);
+    createUserProfile: roleAuthentication(["USER"], async (_, { firstName, lastName, birthDate, password, faculty, course }, { currentUser }) => {
+      await validator.validateCreateUserProfile(firstName, lastName, birthDate, password, faculty, course);
+      return await repository.createUserProfile(currentUser, firstName, lastName, birthDate, password, faculty, course);
+    }),
+
+    editUserProfile: roleAuthentication(["USER"], async (_, { firstName, lastName, birthDate, password, faculty, course }, { currentUser }) => {
+      await validator.validateEditDetails(firstName, lastName, birthDate, password, faculty, course);
+      return await repository.editUserProfile(currentUser, firstName, lastName, birthDate, password, faculty, course);
     }),
 
     signInUser: async (_, { email, password }) => {

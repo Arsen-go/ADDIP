@@ -9,6 +9,8 @@ const query = gql`
     userQuestions (limit: Int, skip: Int): [Question]
     questions (limit: Int, skip: Int): [Question]
     searchQuestions (text: String): [Question]
+    questionById (id: String!): Question
+    answersByQuestionId (questionId: String!): [Answer]
     #Chat#
     getConversations: [Conversation]
     messagesByConversationId (conversationId: String, limit: Int, skip: Int): [Message]
@@ -26,8 +28,9 @@ const query = gql`
     authenticateUser (code: String!, email: String!): Token
     signInUser (email: String!, password: String!): Token
     createAttachment (id: String,contentType: String, pixelWidth: Float, pixelHeight: Float, size: String, name: String): Attachment!
-    verifyEmail (email: String!): String
-    createUserProfile (firstName: String!, lastName: String!, birthDate: String!, password: String!): User
+    verifyEmail (email: String!, isVisitor: Boolean): String
+    createUserProfile (firstName: String!, lastName: String!, birthDate: String!, password: String!, faculty: String, course: Int): User
+    editUserProfile (firstName: String, lastName: String, birthDate: String, password: String, faculty: String, course: Int): User
     createQuestion (headerText: String!, text: String!, keyWords: [String], attachmentIds: [String], faculty: String, course: Float): Question
     editQuestion (questionId: String!, headerText: String, text: String, keyWords: [String], attachmentIds: [String], faculty: String, course: Float): Question
     answerQuestion (questionId: String!, answer: String!, attachmentIds: [String]): Answer

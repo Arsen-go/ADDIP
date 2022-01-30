@@ -44,6 +44,16 @@ class QuestionResolver {
             const { text } = args;
             return await repository.searchQuestions(text);
         }),
+
+        questionById: roleAuthentication(["USER"], async (_, args) => {
+            const { id } = args;
+            return await repository.getQuestion(id);
+        }),
+
+        answersByQuestionId: roleAuthentication(["USER"], async (_, args) => {
+            const { questionId } = args;
+            return await repository.getAnswersByQuestionId(questionId);
+        }),
     };
 
     Question = {
@@ -57,13 +67,17 @@ class QuestionResolver {
     };
 
     Comment = {
-        question: async (comment) => await repository.getQuestion(comment.question),
+        question: async (comment) => await repository.getQuestionByObjectId(comment.question),
 
         answer: async (comment) => await repository.getAnswer(comment.answer),
     };
 
     Answer = {
         owner: async (answer) => await repository.getUser(answer),
+
+        comment: async (answer) => await repository.getAnswerComments(answer),
+
+        question: async (answer) => await repository.getQuestionByObjectId(answer.question),
     };
 
     Mutation = {

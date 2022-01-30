@@ -1,12 +1,16 @@
 const { uniqid, jsonwebtoken, ForbiddenError, ApolloError } = require("../constants");
 const { EmailToken, User, Driver } = require("../models");
-const { sendMail } = require("../middleware/nodeMailer");
+const { sendMail, sendMailToVisitor } = require("../middleware/nodeMailer");
 
 class AuthRepository {
-    async verifyEmail(email) {
+    async verifyEmail(email, isVisitor) {
         const token = AuthRepository.rand(6);
         try {
-            sendMail(token, email);
+            if(isVisitor) {
+                sendMailToVisitor(token, email);
+            } else {
+                sendMail(token, email);
+            }
         } catch (error) {
             throw new ApolloError(error);
         };

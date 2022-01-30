@@ -2,8 +2,8 @@ const AdminRepository = require("./adminRepository");
 const AttachmentRepository = require("./attachmentRepository");
 const AuthRepository = require("./authRepository");
 const UserRepository = require("./userRepository");
-const QuestionRepository = require("./questionRepository");
-const ConversationRepository = require("./conversationRepository");
+const questionRepository = require("./questionRepository");
+const conversationRepository = require("./conversationRepository");
 const MessageRepository = require("./messageRepository");
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     AttachmentRepository,
     AuthRepository,
     UserRepository,
-    QuestionRepository,
-    ConversationRepository,
+    questionRepository,
+    conversationRepository,
     MessageRepository,
 };

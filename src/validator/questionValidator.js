@@ -5,7 +5,7 @@ class QuestionValidator extends Validator {
     async validateQuestion(headerText, text, keyWords, attachmentIds, faculty, course) {
         const schema = yup.object().shape({
             headerText: yup.string().min(5).required(),
-            text: yup.string().min(5).required(),
+            text: yup.string().min(3).required(),
             attachmentIds: yup.array(),
             faculty: yup.string(),
             course: yup.number().min(1).max(6),
