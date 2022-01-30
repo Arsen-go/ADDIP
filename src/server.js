@@ -35,7 +35,7 @@ const { ApolloServer, express, bodyParser, ApolloServerPluginLandingPageGraphQLP
       let authToken = null;
       let currentUser = null;
       let currentDriver = null;
-      let admin = null;
+      let currentAdmin = null;
       let subscriptionContext = null;
 
       try {
