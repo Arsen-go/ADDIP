@@ -67,17 +67,7 @@ const { ApolloServer, express, bodyParser, ApolloServerPluginLandingPageGraphQLP
           : "",
       };
     },
-    plugins: [
-      ApolloServerPluginLandingPageGraphQLPlayground(),
-      {
-        async serverWillStart() {
-          return {
-            async drainServer() {
-              subscriptionServer.close();
-            }
-          };
-        }
-      }],
+
   });
   await server.start();
   server.applyMiddleware({ app });
