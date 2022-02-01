@@ -1,5 +1,5 @@
 const { ApolloError, uniqid } = require("../constants");
-const { User } = require("../models");
+const { User, Question } = require("../models");
 
 class UserRepository {
     constructor(authRepository, questionRepository, conversationRepository) {
