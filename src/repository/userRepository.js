@@ -1,5 +1,5 @@
-const { ApolloError, uniqid } = require("../constants");
-const { User, Question } = require("../models");
+const { ApolloError } = require("../constants");
+const { User, Question, Conversation } = require("../models");
 
 class UserRepository {
     constructor(authRepository, questionRepository, conversationRepository) {
@@ -64,7 +64,7 @@ class UserRepository {
             await this.questionRepository.deleteQuestion(user, q.id);
         }
 
-        const conversations = await this.conversationRepository.find({ owner: user._id });
+        const conversations = await Conversation.find({ owner: user._id });
         for (const c of conversations) {
             await this.conversationRepository.deleteConversation(c);
         }
