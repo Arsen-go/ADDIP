@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server");
 
 const query = gql`
+  scalar Date
+
   type Query {  
     ##### Admin ####
     ##### Mobile ####
@@ -23,6 +25,7 @@ const query = gql`
   type Mutation {
     #### Admin ####
     signInAdmin (email: String!, password: String!): Token
+    createPoll (question: String!, options: [String!], duration: Date!): Token
     #### General ####
     #### Mobile ####
     authenticateUser (code: String!, email: String!): Token

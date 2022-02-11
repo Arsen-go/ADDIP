@@ -159,4 +159,4 @@ class ConversationRepository {
     //     };
 };
 
-module.exports = new ConversationRepository();
+module.exports = ConversationRepository;

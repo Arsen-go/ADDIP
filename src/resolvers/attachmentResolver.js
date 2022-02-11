@@ -6,8 +6,8 @@ const { User, Attachment } = require('../models');
 let validator, repository;
 
 class AttachmentResolver {
-    constructor(validatorObject, attachmentRepository) {
-        validator = validatorObject;
+    constructor({ attachmentValidator, attachmentRepository }) {
+        validator = attachmentValidator;
         repository = attachmentRepository;
     };
 

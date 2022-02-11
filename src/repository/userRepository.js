@@ -22,7 +22,7 @@ class UserRepository {
 
             return await user.save();
         } catch (error) {
-            throw new ApolloError(error);
+            throw new ApolloError(error, 555);
         }
     };
 
@@ -33,7 +33,7 @@ class UserRepository {
             }, { upsert: true });
             return editedUser;
         } catch (error) {
-            throw new ApolloError(error);
+            throw new ApolloError(error, 555);
         }
     };
 

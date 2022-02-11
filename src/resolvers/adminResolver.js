@@ -4,7 +4,7 @@ const { User } = require("../models");
 let validator, repository;
 
 class AdminResolver {
-  constructor(adminValidator, adminRepository) {
+  constructor({ adminValidator, adminRepository }) {
     repository = adminRepository;
     validator = adminValidator;
   };

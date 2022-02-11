@@ -496,4 +496,4 @@ class QuestionRepository {
     };
 };
 
-module.exports = new QuestionRepository();
+module.exports = QuestionRepository;

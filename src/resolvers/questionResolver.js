@@ -4,7 +4,7 @@ const { pubsub, withFilter } = require("../constants");
 let validator, repository;
 
 class QuestionResolver {
-    constructor(questionValidator, questionRepository) {
+    constructor({ questionValidator, questionRepository }) {
         validator = questionValidator;
         repository = questionRepository;
     };

@@ -5,6 +5,7 @@ const QuestionValidator = require("./questionValidator");
 const UserValidator = require("./userValidator");
 const ConversationValidator = require("./conversationValidator");
 const MessageValidator = require("./messageValidator");
+const PollValidator = require("./pollValidator");
 
 module.exports = {
     AdminValidator,
@@ -14,4 +15,5 @@ module.exports = {
     UserValidator,
     ConversationValidator,
     MessageValidator,
+    PollValidator
 };
